@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Techsture Technologies</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static "css/index.css" %}">
+    {% block css %}{% endblock css %}
+    <!-- Boxicons CDN Link -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <!-- Icon for displaying the password -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+    {% comment %} <link rel="icon" href="{% static 'static/img/favicon.ico' %}" type="image/x-icon"> {% endcomment %}
+    <link rel="icon" type="favicon.ico" href="static/img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <div class="sidebar">
+        <ul class="nav-list">
+            <li class="header">
+                <div class="logo-details">
+                    <img src="static/img/techsture_icon.webp" alt="techsture_icon">
+                    <div class="logo_name">Techsture Technologies</div>
+                    <i class='bx bx-menu' id="btn"></i>
+                </div>
+            </li>
+
+            {% if menu_list %}
+                {% for item in menu_list %}
+                <li>
+                    <a href="{{ item.1 }}">
+                        <i class='bx bx-{{ item.2 }}'></i>
+                        <span class="links_name">{{ item.0 }}</span>
+                    </a>
+                    <span class="tooltip">{{ item.0 }}</span>
+                </li>
+                {% endfor %}
+            {% endif %}
+
+            <li class="profile">
+                <div class="profile-details">
+                    <img src="{{ profile_pic_url }}" alt="profileImg">
+                    <div class="name_job">
+                        <div class="name">{{ display_name }}</div>
+                        <div class="job">{{ position }}</div>
+                    </div>
+                </div>
+                {% comment %} <a href="#" id="logout_button"> {% endcomment %}
+                    <i class='bx bx-log-out' id="log_out" onclick="showConfirmationDialog()"></i>
+                    {% comment %} <span class="links_name">Logout</span> {% endcomment %}
+                {% comment %} </a> {% endcomment %}
+                {% comment %} <span class="tooltip">Logout</span> {% endcomment %}
+            </li>
+        </ul>
+    </div>
+
+    <section class="home-section">
+        {% block section %}{% endblock section %}
+    </section>
+
+    <div id="overlay"></div>
+    <div id="confirmationModal">
+        <h2>Logout Confirmation</h2>
+        <p>Are you sure you want to logout?</p>
+        <button onclick="confirmLogout()">Yes</button>
+        <button onclick="cancelLogout()">No</button>
+    </div>
+
+    <script src="{% static "js/index.js" %}"></script>
+    <script>
+        window.addEventListener('beforeunload', function(event) {
+            navigator.sendBeacon('/update_checkout_time/');
+        });
+    </script>
+    {% block script %}{% endblock script %}
+</body>
+
+</html>

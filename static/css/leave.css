@@ -1,0 +1,149 @@
+:root {
+    --primary-color: #4747a1;
+    --secondary-color: #f4f7fe;
+}
+
+#profile-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+#leaveFormContent {
+    display: none;
+}
+
+#leavesection2heading {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    text-align: center;
+    font-weight: bold;
+}
+
+#leaveForm {
+    margin-top: 100px;
+}
+
+.container {
+    height: 100vh;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    overflow-y: auto;
+    max-height: calc(100vh - 150px);
+}
+
+table,
+th,
+td {
+    font-size: 20px;
+    padding: 10px;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+td {
+    text-align: center;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    color: white;
+    border: none;
+    background-color: #4CAF50;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+
+#overlayForm {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+#leaveFormContent {
+    display: none;
+    position: fixed;
+    height: auto;
+    width: auto;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+    padding: 5px;
+    border-radius: 5px;
+    z-index: 1000;
+}
+
+.cancel_button, .reject-button {
+    background-color: #ff2c2c;
+}
+
+.cancel_button:hover, .reject-button:hover {
+    background-color: #ff0000;
+}
+
+.form-group {
+    display: flex;
+    padding: 10px;
+    justify-content: center;
+}
+
+.leave-form-buttons {
+    text-align: center;
+    padding: 10px;
+}
+
+input {
+    text-align: center;
+    margin: 5px;
+}
+
+#subject {
+    width: 220px;
+}
+
+label {
+    font-weight: 600;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+}
+
+.approve-button, .reject-button {
+    padding: 5px 10px;
+    font-size: 18px;
+    cursor: pointer;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    margin: 5px;
+}
+
+#icons {
+    font-weight: bolder;
+}

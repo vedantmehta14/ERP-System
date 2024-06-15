@@ -1,0 +1,285 @@
+.fc-left h2 {
+  color: var(--primary-color);
+}
+
+.fa {
+  /* display: inline-block !important; */
+  display: inline-block;
+  margin-right: 0.5em;
+}
+
+.fc-content {
+  float: left;
+}
+
+.fc-center {
+  color: var(--primary-color);
+}
+
+.I_edit,
+.I_delete {
+  padding: 8px;
+  cursor: pointer;
+  font-size: .8em;
+}
+
+.fc-time {
+  padding-left: 20px;
+  padding-right: 3px;
+  font-size: large;
+}
+
+body {
+  background-color: var(--secondary-color);
+}
+
+.fc-day-header {
+  color: var(--primary-color);
+}
+
+.fc-row .fc-content-skeleton td,
+.fc-row .fc-helper-skeleton td {
+  background: 0 0;
+  border-bottom: 0;
+}
+
+#calendar {
+  padding: 20px;
+  background-color: var(--secondary-color);
+  font-size: 0.7em;
+}
+
+.fc-day-grid-event .fc-content {
+  margin-bottom: 10px;
+}
+
+.modle {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  overflow: auto;
+  font-size: 17px;
+}
+
+.modle-continer {
+  background-color: var(--secondary-color);
+  margin: 8% auto;
+  /* width: calc(70% - 78px); */
+  width: 500px;
+  box-shadow: 0 5px 8px rgba(0, 0, 0, 0.2), 0 7px 20px rgba(0, 0, 0, 0.2);
+  animation-name: modalopen;
+  animation-duration: 0.5s;
+}
+
+.modle-header {
+  background: var(--secondary-color);
+  color: var(--primary-color);
+  height: 50px;
+  padding: 5px;
+  text-align: center;
+  font-size: 25px;
+}
+
+.modal-body {
+  font-size: 20px;
+  color: var(--primary-color);
+}
+
+.modle-footer {
+  background: var(--secondary-color);
+  text-align: center;
+  height: 70px;
+}
+
+@keyframes modalopen {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.vertical-date {
+  list-style: none;
+  padding: 1em;
+  text-align: left;
+  border-bottom: 2px solid #000;
+}
+
+.list-daynumber {
+  line-height: 0.5em;
+  font-size: 46px;
+  font-weight: 800;
+  opacity: 0.9;
+}
+
+.list-monthname {
+  font-size: 32px;
+  opacity: 0.6;
+  border-bottom: 5px solid #ff4d55;
+  width: 59px;
+}
+
+.duration {
+  display: block;
+  color: #908383;
+  font-weight: 600;
+  margin-top: 0.8em;
+}
+
+.s_title {
+  color: var(--primary-color);
+  font-size: 1.3em;
+  margin: -13px 34px;
+  position: absolute;
+  font-weight: 900;
+}
+
+.s_des {
+  font-size: 16px;
+  font-style: italic;
+}
+
+.fc-scroller::-webkit-scrollbar {
+  display: none;
+}
+
+.submitButton,
+.cancelButton,
+.deleteButton {
+  font-size: 15px;
+  height: auto;
+  width: auto;
+  padding: 5px;
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  border-radius: 10px;
+  border: 0px;
+  font-weight: 200;
+  padding: 10px;
+  margin: 10px;
+  font-weight: 400;
+}
+
+.submitButton:hover,
+.cancelButton:hover,
+.deleteButton:hover {
+  cursor: pointer;
+}
+
+.fc-event {
+  padding: 5px;
+  background-color: var(--primary-color);
+  height: auto;
+  color: var(--secondary-color);
+  border: 0px;
+}
+
+.fc-event .fc-bg {
+  z-index: 1;
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  opacity: .25;
+}
+
+.fc-content {
+  display: flex;
+  align-items: center;
+}
+
+.fc-content *:not(.fc-title) {
+  display: none;
+}
+
+.fc-event-container {
+  background-color: var(--primary-color);
+}
+
+.form-group {
+  display: flex;
+  padding: 10px;
+  justify-content: center;
+}
+
+input,
+textarea {
+  text-align: center;
+  margin: 5px;
+}
+
+label {
+  font-weight: 600;
+}
+
+#event-title {
+  width: 200px;
+}
+
+#event-details {
+  width: 250px;
+  height: 100px;
+}
+
+textarea::-webkit-scrollbar {
+  display: none;
+}
+
+.deleteButton {
+  background-color: #ff2c2c;
+}
+
+.deleteButton:hover {
+  background-color: #ff0000;
+}
+
+.submitButton {
+  background-color: #4CAF50;
+}
+
+.submitButton:hover {
+  background-color: #45a049;
+}
+
+.cancelButton {
+  background-color: #007bff;
+}
+
+.cancelButton:hover {
+  background-color: #0070e9;
+}
+
+#overlayModal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+.modal-container {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
+  padding: 20px;
+  border-radius: 5px;
+  z-index: 1000;
+  width: auto;
+  height: auto;
+}
+
+.modal-header, .modal-footer {
+  text-align: center;
+}

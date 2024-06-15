@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+    <link rel="icon" type="favicon.ico" href="static/img/favicon.ico">
+    {% load static %}
+    <link rel="stylesheet" href="{% static "css/register.css" %}">
+</head>
+
+
+<body>
+
+    <form method="post" action="/register" enctype="multipart/form-data" >
+        {% csrf_token %}
+        <h1>Techsture Technologies</h1>
+            
+            <div id="profile-container">
+                <img id="profile-picture" src="{{ profile_pic_url }}" alt="Profile Picture">
+            </div>
+            {% comment %} <div id="profile-container">
+                <label for="file-input" class="buttons">Upload Picture</label>
+                <input type="file" name="profilepic" id="profilepic">
+            </div> {% endcomment %}
+            <div id="profile-container">
+                <label for="profilepic" class="buttons">Upload Picture</label>
+                <input type="file" name="profilepic" id="profilepic" style="display: none;">
+            </div>           
+
+
+            <div class="container">
+                <label for="fname">First Name<span class="required">*</span></label>
+                <input type="text" id="fname" name="fname" class="editable" placeholder="Enter your first name">
+        
+                <label for="mname">Middle Name<span class="required">*</span></label>
+                <input type="text" id="mname" name="mname" class="editable" placeholder="Enter your middle name">
+        
+                <label for="lname">Last Name<span class="required">*</span></label>
+                <input type="text" id="lname" name="lname" class="editable" placeholder="Enter your last name">
+            </div>
+        
+            <div class="container">
+                <label for="username">Username<span class="required">*</span></label>
+                <input type="text" id="username" name="username" class="editable" placeholder="Enter your username">
+        
+                <label for="email">Email<span class="required">*</span></label>
+                <input type="email" id="email" name="email" class="editable" placeholder="Enter your email">
+
+                <label for="phno">Phone Number<span class="required">*</span></label>
+                <input type="text" id="phno" name="phno" class="editable" placeholder="Enter your phone number">
+            </div>
+            
+            <div class="container">
+                <label for="password">Password</label>
+                <input type="text" id="password" name="password" class="editable" placeholder="Enter password (Default: admin123)">
+        
+                <label for="dob">Date of birth<span class="required">*</span></label>
+                <input type="date" id="dob" name="dob" class="editable">
+            </div>
+     
+        
+            <div class="container">
+                <label for="address_line_1">Address Line 1<span class="required">*</span></label>
+                <input type="text" id="address1" name="address1" class="editable" placeholder="Enter address line 1">
+        
+                <label for="address_line_2">Address Line 2:</label>
+                <input type="text" id="address2" name="address2" class="editable" placeholder="Enter address line 2">
+            </div>
+        
+            <div class="container">
+                <label for="city">City<span class="required">*</span></label>
+                <input type="text" id="city" name="city" class="editable" placeholder="Enter city">
+        
+                <label for="pincode">Pincode<span class="required">*</span></label>
+                <input type="text" id="pincode" name="pincode" class="editable" placeholder="Enter pincode">
+            </div>
+        
+            <div class="container">
+                <label for="state">State<span class="required">*</span></label>
+                <input type="text" id="state" name="state" class="editable" placeholder="Enter state">
+        
+                <label for="country">Country<span class="required">*</span></label>
+                <input type="text" id="country" name="country" class="editable" placeholder="Enter country">
+            </div>
+        
+            <div class="container">
+                {% comment %} <label>Gender<span class="required">*</span></label>
+                <input type="radio" id="male" name="gender" value="M" required>
+                <label for="male">Male</label>
+                <input type="radio" id="female" name="gender" value="F">
+                <label for="female">Female</label>
+                <input type="radio" id="other" name="gender" value="O">
+                <label for="other">Other</label> {% endcomment %}
+                <label>Gender<span class="required" id='gender-label'>*</span></label>
+                <div class="radio-container">
+                    <input type="radio" id="male" name="gender" value="M" required>
+                    <label for="male">Male</label>
+                </div> 
+                
+                <div class="radio-container">
+                    <input type="radio" id="female" name="gender" value="F">
+                    <label for="female">Female</label>
+                </div> 
+                
+                <div class="radio-container">
+                    <input type="radio" id="other" name="gender" value="O">
+                    <label for="other">Other</label>
+                </div> 
+
+                <label for="salary">Basic Salary<span class="required">*</span></label>
+                <input type="number" id="salary" name="salary" class="editable" placeholder="Enter Basic Salary">
+            </div>
+        
+            <div class="container">
+                <label for="qualification">Qualification<span class="required">*</span></label>
+                <input type="text" id="qualification" name="qualification" class="editable" placeholder="Enter Qualification">
+        
+                <label for="position">Position<span class="required">*</span></label>
+                <input type="text" id="position" name="position" class="editable" placeholder="Enter job title">
+            </div>
+        
+            <div class="container">
+                <label for="department">Department<span class="required">*</span></label>
+                <input type="text" id="department" name="department" class="editable" placeholder="Enter department">
+        
+                <label for="reporting">Reports To<span class="required">*</span></label>
+                <input type="text" id="reporting" name="reportsto" class="editable" placeholder="Enter name of mentor">
+            </div>
+        
+            <div class="container">
+                <button type="submit" class="buttons"  id="save-changes-button">Register</button>
+            </div>
+        
+        </form>
+    <script src="{% static "js/register.js" %}"></script>
+    {% block script %}{% endblock script %}
+</body>
+
+</html>

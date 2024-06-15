@@ -1,0 +1,185 @@
+{% extends "index.html" %}
+
+{% block css %}
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.css'>
+<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'>
+{% load static %}
+<link rel="stylesheet" href="{% static "css/event.css" %}">
+{% endblock css %}
+
+{% block section %}
+
+<div id='calendar'></div>
+
+<div id='overlayModal'>
+    <div class='modal-container' id='event-form-container'>
+        <form method="post" id="event-form" action="/event">
+            {% csrf_token %}
+            <input type='hidden' name='action' id='form-action' value='add'> <!-- Hidden input for action -->
+            <div class='modal-header'>
+                <h2>Add Event</h2>
+            </div>
+            <div class='modal-body'>
+                <input type='hidden' name='username' value='{{ request.session.username }}'>
+                <div class="form-group">
+                    <label for='event-title'>Event Name</label>
+                    <input type='text' name='event-title' id='event-title' class='form-control' placeholder='Enter the event title'>
+                </div>
+                <div class="form-group">
+                    <label for="event-start">From</label>
+                    <input id="event-start" type="datetime-local" name="event-start" class='form-control' />
+                </div>
+                <div class="form-group">
+                    <label for="event-end">To</label>
+                    <input id="event-end" type="datetime-local" name="event-end" class='form-control' />
+                </div>
+                <div class="form-group">
+                    <label for="event-details">Details</label>
+                    <textarea id="event-details" type='text' name="event-details" class='form-control' placeholder='Enter the details of the event'></textarea>
+                </div>
+            </div>
+            <div class='modal-footer'>
+                <button type="submit" class="submitButton">Save</button>
+                <button type="button" class="cancelButton" onclick="hideForm()">Cancel</button>
+            </div>
+        </form>        
+    </div>
+
+    <div class='modal-container' id='edit-form-container'>
+        <form method="post" id="edit-form" action="/event">
+            {% csrf_token %}
+            <div class='modal-header'>
+                <h2>Edit Event</h2>
+            </div>
+            <div class='modal-body'>
+                <input type='hidden' name='event-id' id='event-id'>
+                <input type='hidden' name='action' id='action'>
+                <input type='hidden' name='username' value='{{ request.session.username }}'>
+                <div class="form-group">
+                    <label for='event-title'>Event Name</label>
+                    <input type='text' name='event-title' id='event-title' class='form-control'>
+                </div>
+                <div class="form-group">
+                    <label for="event-start">From</label>
+                    <input id="event-start" type="datetime-local" name="event-start" class='form-control' />
+                </div>
+                <div class="form-group">
+                    <label for="event-end">To</label>
+                    <input id="event-end" type="datetime-local" name="event-end" class='form-control' />
+                </div>
+                <div class="form-group">
+                    <label for="event-details">Details</label>
+                    <textarea id="event-details" type='text' name="event-details" class='form-control'></textarea>
+                </div>
+            </div>
+            <div class='modal-footer'>
+                <button type="button" class="submitButton">Save</button>
+                <button type="button" class="deleteButton">Delete</button>
+                <button type="button" class="cancelButton" onclick="hideForm()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock section %}
+
+{% block script %}
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.0/moment.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.2.0/fullcalendar.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js'></script>
+<script>
+    function showForm(formId) {
+        document.getElementById('overlayModal').style.display = 'block';
+        document.getElementById(formId).style.display = 'block';
+    }
+
+    function hideForm() {
+        document.getElementById('overlayModal').style.display = 'none';
+        document.getElementById('event-form-container').style.display = 'none';
+        document.getElementById('edit-form-container').style.display = 'none';
+    }
+
+    $(document).ready(function() {
+        $('#calendar').fullCalendar({
+            header: {
+                left: 'month, agendaWeek, agendaDay',
+                center: 'title',
+                right: 'prev, today, next'
+            },
+            buttonText: {
+                today: 'Today',
+                month: 'Month',
+                week: 'Week',
+                day: 'Day'
+            },
+            timezone: 'local',
+            defaultView: 'month',
+            allDayDefault: false,
+            allDaySlot: false,
+            slotEventOverlap: true,
+            slotDuration: "00:30:00",
+            slotLabelInterval: "00:30:00",
+            snapDuration: "00:30:00",
+            contentHeight: 620,
+            scrollTime: "8:00:00",
+            axisFormat: 'h:mm a',
+            timeFormat: 'h:mm A()',
+            minTime: "09:00:00",
+            maxTime: "19:30:00",
+            selectable: true,
+            selectHelper: true,
+            events: [
+                {% for event in events %}
+                {
+                    title: '{{ event.title|escapejs|safe }}',
+                    start: '{{ event.start|date:"Y-m-d\TH:i" }}',
+                    end: '{{ event.end|date:"Y-m-d\TH:i" }}',
+                    description: '{{ event.details|escapejs|safe}}',
+                    id: '{{ event.eventid }}'  // Add event ID
+                },
+                {% endfor %}
+            ],
+            select: function(start, end) {
+                $('#event-form #form-action').val('add');  // Set action to add
+                showForm('event-form-container');
+            },
+            eventClick: function(event) {
+                $('#edit-form #event-title').val(event.title);
+                $('#edit-form #event-start').val(moment(event.start).format('YYYY-MM-DDTHH:mm'));
+                $('#edit-form #event-end').val(moment(event.end).format('YYYY-MM-DDTHH:mm'));
+                $('#edit-form #event-details').val(event.description);
+                $('#edit-form #event-id').val(event.id);  // Set event ID
+                $('#edit-form #action').val('edit');  // Set action to edit
+                showForm('edit-form-container');
+            },
+            eventRender: function(event, element, view) {
+                if (view.type === 'month') {
+                    element.css('height', '20px');
+                }
+            },
+        });
+
+        $('.cancelButton').click(function(e) {
+            e.preventDefault();
+            hideForm();
+        });
+
+        $('.deleteButton').click(function(e) {
+            e.preventDefault();
+            $('#edit-form #action').val('delete');  // Set action to delete
+            $('#edit-form').submit();
+        });
+
+        $('.submitButton').click(function(e) {
+            e.preventDefault();
+            if ($('#event-form-container').is(':visible')) {
+                $('#event-form').submit();
+            } else {
+                $('#edit-form').submit();
+            }
+        });
+    });
+</script>
+{% endblock script %}

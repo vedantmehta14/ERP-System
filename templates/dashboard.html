@@ -1,0 +1,232 @@
+{% extends "index.html" %}
+
+{% block css %}
+{% load static %}
+<link rel="stylesheet" href="{% static "css/dashboard.css" %}">
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.css'>
+<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'>
+{% endblock css %}
+
+{% block section %}
+
+<div id="overlayForm" style="display: none;">
+    <div class="overlay-content">
+        <form method="POST" action="{% url 'add_announcement' %}" id="add-announcement-form">
+            {% csrf_token %}
+            <h3>New Announcement</h3>
+            <div class="form-group">
+                <textarea id="content" name="content" class="form-control" placeholder="Enter the content of announcement" maxlength="50" required oninput="updateCharacterCount()"></textarea>
+            </div>
+            <div id="char-count">50 characters remaining</div>
+            <div class="form-buttons">
+                <button type="submit" class='buttons'>Add</button>
+                <button type="button" onclick="hideForm()" class='buttons' id='cancel-announcement-form'>Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class='container'>
+    <div class="announcement">
+        <div class="announcement-heading">
+            <div class="heading-content">
+                <h1>Announcements</h1>
+            </div>
+            {% if isAdmin %}
+                <button type="button" onclick="showForm()" id="add-announcement-button">
+                    <i class='bx bx-plus' id='icons'></i>
+                </button>
+            {% endif %}
+        </div>
+        <div class="data">
+            {% for announcement in announcements %}
+                <div class="announcement-content">
+                    <div class='announcement-text'>
+                        {{ announcement.content }}
+                    </div>
+                    {% if isAdmin %}
+                    <form method="POST" action="{% url 'delete_announcement' announcement.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="delete-button">
+                            <i class='bx bx-trash' id='icons'></i>
+                        </button>
+                    </form>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="birthday">
+        <div class="birthday-heading">
+            <h1>Upcoming Birthdays</h1>
+        </div>
+        <div class="data">
+            {% for user in birthday_users %}
+            <div class="content">
+                <div class="profile">
+                    <img src="{{ user.Profilepic.url }}" alt="profile">
+                </div>
+                <div class="caption">
+                    {{ user.FirstName }} {{ user.LastName }}'s birthday is in the current month!
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+</div>
+<div class="container">
+    <div class="tasks">
+        <div class="tasks-heading">
+            <h1>Pending Tasks</h1>
+        </div>
+        <div class="data">
+            <div class="content">Develop a New Feature for the Mobile App</div>
+            <div class="content">Conduct Code Review and Refactor Legacy Code</div>
+            <div class="content">Implement Automated Testing</div>
+            <div class="content">Participate in Scrum Meetings</div>
+            <div class="content">Research and Present on Emerging Technology</div>
+        </div>
+    </div>
+
+    <div class="calendar">
+        {% comment %} <div class="calendar-heading">
+            <h1>Calendar</h1>
+        </div> {% endcomment %}
+        <div id='calendar'></div>
+    </div>
+    
+    <div class="timesheet">
+        <div class="timesheet-heading">
+            <h1>Recent Timesheet</h1>
+        </div>
+        <table id="checkInOutTable">
+            <thead>
+              <tr>
+                <th>Username</th>
+                <!-- <th>Date</th> -->
+                <th>Check-In</th>
+                <th>Check-Out</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody">
+              {% for entry in timesheet_data %}
+              <tr>
+                <td>{{ entry.username }}</td>
+                <!-- <td>{{ entry.date }}</td> -->
+                <td>{{ entry.check_in_time }}</td>
+                <td>{{ entry.check_out_time }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+    </div>
+</div>
+
+{% endblock section %}
+
+{% block script %}
+{% load static %}
+<script src="{% static "js/dashboard.js" %}"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.0/moment.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.2.0/fullcalendar.min.js'></script>
+<script>
+function showForm() {
+    document.getElementById('overlayForm').style.display = 'block';
+}
+
+function hideForm() {
+    document.getElementById('overlayForm').style.display = 'none';
+}
+function updateCharacterCount() {
+    const textarea = document.getElementById('content');
+    const charCount = document.getElementById('char-count');
+    const maxLength = textarea.maxLength;
+    const currentLength = textarea.value.length;
+    charCount.textContent = `${maxLength - currentLength} characters remaining`;
+}
+$(document).ready(function() {
+    $(document).ready(function() {
+        $('#calendar').fullCalendar({
+            header: {
+                right: 'prev, today, next',
+                customButtons: {
+                    prev: {
+                        text: 'prev',
+                        click: function() {
+                            $('#calendar').fullCalendar('prev');
+                        },
+                        themeButtonIcons: false,
+                        classes: 'small-button' 
+                    },
+                    today: {
+                        text: 'today',
+                        click: function() {
+                            $('#calendar').fullCalendar('today');
+                        },
+                        themeButtonIcons: false,
+                        classes: 'small-button' 
+                    },
+                    next: {
+                        text: 'next',
+                        click: function() {
+                            $('#calendar').fullCalendar('next');
+                        },
+                        themeButtonIcons: false,
+                        classes: 'small-button'
+                    }
+                }
+            },
+            buttonText: {
+                today: 'Today',
+            },
+            timezone: 'local',
+            defaultView: 'month',
+            allDayDefault: false,
+            allDaySlot: false,
+            slotEventOverlap: true,
+            contentHeight: 'auto',
+            events: [
+                {% for event in events %}
+                {
+                    title: '{{ event.title|escapejs|safe }}',
+                    start: '{{ event.start|date:"Y-m-d\TH:i" }}',
+                    end: '{{ event.end|date:"Y-m-d\TH:i" }}',
+                    description: '{{ event.details|escapejs|safe}}',
+                    id: '{{ event.eventid }}'
+                },
+                {% endfor %}
+            ],
+            eventRender: function(event, element, view) {
+                if (view.type === 'month') {
+                    element.css({
+                        'height': '20px',
+                        'width': '20px',
+                        'border-radius': '50%',
+                        'background-color': '#FF5F15',
+                        'border': 'none'
+                    });
+                    element.find('.fc-title').remove();  
+                    element.find('.fc-time').remove();  
+
+                    var tooltip = $('<div class="tooltip">' + 'Title: ' + event.title + '<br>' +
+                        'Start: ' + moment(event.start).format('LLL') + '<br>' +
+                        'End: ' + moment(event.end).format('LLL') + '</div>');
+
+                    element.append(tooltip);
+                    element.on('mouseenter', function() {
+                        tooltip.show();
+                    });
+                    element.on('mouseleave', function() {
+                        tooltip.hide();
+                    });
+                }
+            },
+            
+        });
+    }); 
+});
+</script>
+{% endblock script %}

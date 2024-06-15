@@ -1,0 +1,193 @@
+{% extends "index.html" %}
+
+{% block css %}
+{% load static %}
+<link rel="stylesheet" href="{% static "css/adminuser.css" %}">
+{% endblock css %}
+
+{% block section %}
+<div class="container">
+    <table>
+        <thead>
+            <tr>
+                <th>Profile Photo</th>
+                <th>Username</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Status</th>
+                <th>Role</th>
+                <th>Position</th>
+                <th>Department</th>
+                {% comment %} <th>Reporting Manager</th> {% endcomment %}
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in users %}
+            <tr>
+                <td><img src="{{ i.pic_url.url }}" alt="Profile Photo" class="profile-photo"></td>
+                <td>{{ i.Username }}</td>
+                <td>{{ i.FirstName }}</td>
+                <td>{{ i.LastName }}</td>
+                <td>{{ i.status }}</td>
+                <td>{{ i.role }}</td>
+                <td>{{ i.Position }}</td>
+                <td>{{ i.Department }}</td>
+                {% comment %} <td>{{ i.Reportsto }}</td> {% endcomment %}
+                <td>
+                    <div class="button-container">
+                        <button type="button" class="edit-user-button" data-username="{{ i.Username }}"><i class='bx bx-edit'></i></button>
+                        <!-- <form method="post" action="{% url 'delete_user' i.Username %}">
+                            {% csrf_token %}
+                            <button type="submit" id="delete-user-button"><i class='bx bx-trash' id='icons'></i></button>
+                        </form> -->
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div id="editUserModal" class="modal">
+    <form id="edit-user-form" method="post" action="{% url 'edit_user' %}">
+        {% csrf_token %}
+        <input type="hidden" id="edit-username" name="Username">
+        <div class="form-container">
+            <img src="" alt="Profile Photo" id="edit-profile-photo" class="profile-photo-modal">
+        </div>
+        <div class="form-container">
+            <div class="form-group">
+                <label for="edit-FirstName">First Name</label>
+                <input type="text" id="edit-FirstName" name="FirstName" required>
+            </div>
+            <div class="form-group">
+                <label for="edit-MiddleName">Middle Name</label>
+                <input type="text" id="edit-MiddleName" name="MiddleName" required>
+            </div>
+            <div class="form-group">
+                <label for="edit-LastName">Last Name</label>
+                <input type="text" id="edit-LastName" name="LastName" required>
+            </div>
+        </div>
+        <div class="form-container">
+            <div class="form-group">
+                <label for="edit-Password">Password</label>
+                <input type="text" id="edit-Password" name="Password" required>
+            </div>
+            <div class="form-group">
+                <label for="edit-DateofBirth">Date of Birth</label>
+                <input type="date" id="edit-DateofBirth" name="DateofBirth" required>
+            </div>
+        </div>
+        <div class="form-container">
+            <div class="form-group">
+                <label for="edit-Qualifications">Qualifications</label>
+                <input type="text" id="edit-Qualifications" name="Qualifications" required>
+            </div>
+            <div class="form-group">
+                <label for="edit-Position">Position</label>
+                <input type="text" id="edit-Position" name="Position" required>
+            </div>
+        </div>
+        <div class="form-container">
+            <div class="form-group">
+                <label for="edit-Department">Department</label>
+                <input type="text" id="edit-Department" name="Department" required>
+            </div>
+            <div class="form-group">
+                <label for="edit-Reportsto">Reporting Manager</label>
+                <input type="text" id="edit-Reportsto" name="Reportsto" required>
+            </div>
+        </div>
+        <div class="form-container">
+            <div class="form-group">
+                <label for="edit-Email">Email</label>
+                <input type="email" id="edit-Email" name="Email" required>
+            </div>
+            <div class="form-group">
+                <label for="edit-Phone_number">Phone number</label>
+                <input type="text" id="edit-Phone_number" name="Phone_number" required>
+            </div>
+        </div>
+        <div class="form-container">
+            <div class="form-group">
+                <label>Is User</label>
+                <input type="radio" id="edit-is_user-true" name="is_user" value="True"> Yes
+                <input type="radio" id="edit-is_user-false" name="is_user" value="False"> No
+            </div>
+        </div>
+        <div class="form-container">
+            <div class="form-group">
+                <label>Is Admin</label>
+                <input type="radio" id="edit-is_admin-true" name="is_admin" value="True"> Yes
+                <input type="radio" id="edit-is_admin-false" name="is_admin" value="False"> No
+            </div>
+        </div>
+        <div class="form-container">
+            <div class="form-group">
+                <label for="edit-Salary">Basic Salary</label>
+                <input type="number" id="edit-Salary" name="Salary" required>
+            </div>
+        </div>
+        <div class="form-container">
+            <div class="button-container">
+                <button type="submit" class="buttons" id="save-modal-button">Save</button>
+                <button type="button" class="buttons" id="cancel-modal-button">Cancel</button>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock section %}
+
+{% block script %}
+<script>
+var modal = document.getElementById("editUserModal");
+var btns = document.getElementsByClassName("edit-user-button");
+var cancelBtn = document.getElementById("cancel-modal-button");
+
+// Loop through all edit buttons to add click event listeners
+for (var i = 0; i < btns.length; i++) {
+    btns[i].onclick = function() {
+        var username = this.getAttribute("data-username");
+        // Make an AJAX request to get user details
+        fetch(`/get_user_details/${username}/`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("edit-username").value = data.Username;
+                document.getElementById("edit-profile-photo").src = data.pic_url;
+                document.getElementById("edit-Password").value = data.Password;
+                document.getElementById("edit-FirstName").value = data.FirstName;
+                document.getElementById("edit-MiddleName").value = data.MiddleName;
+                document.getElementById("edit-LastName").value = data.LastName;
+                document.getElementById("edit-DateofBirth").value = data.DateofBirth;
+                document.getElementById("edit-Qualifications").value = data.Qualifications;
+                document.getElementById("edit-Position").value = data.Position;
+                document.getElementById("edit-Department").value = data.Department;
+                document.getElementById("edit-Reportsto").value = data.Reportsto;
+                document.getElementById("edit-Email").value = data.Email;
+                document.getElementById("edit-Phone_number").value = data.Phone_number;
+                document.getElementById("edit-Salary").value = data.Salary;
+
+                if (data.is_user) {
+                    document.getElementById("edit-is_user-true").checked = true;
+                } else {
+                    document.getElementById("edit-is_user-false").checked = true;
+                }
+
+                if (data.is_admin) {
+                    document.getElementById("edit-is_admin-true").checked = true;
+                } else {
+                    document.getElementById("edit-is_admin-false").checked = true;
+                }
+
+                modal.style.display = "block";
+            });
+    }
+}
+
+cancelBtn.onclick = function() {
+    modal.style.display = "none";
+}
+</script>
+{% endblock script %}

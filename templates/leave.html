@@ -1,0 +1,94 @@
+{% extends "index.html" %}
+
+{% block css %}
+{% load static %}
+<link rel="stylesheet" href="{% static "css/leave.css" %}">
+{% endblock css %}
+
+{% block section %}
+
+<div id="overlayForm"></div>
+
+<div class="container">
+
+    <div id="profile-container">
+        <button type="button" onclick="showForm()" class="buttons">Apply for new leave</button>
+    </div>
+
+    <form id="leaveFormContent" method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="leave_Startdate">Start Date</label>
+            <input type="date" id="leave_Startdate" name="leave_Startdate" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+            <label for="leave_Enddate">End Date</label>
+            <input type="date" id="leave_Enddate" name="leave_Enddate" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+            <label for="subject">Subject</label>
+            <input type="text" id="subject" name="subject" class="form-control" placeholder="Enter the subject for the leave" required>
+        </div>
+
+        <div class="leave-form-buttons">
+            <button type="submit">Submit</button>
+            <button type="button" class="cancel_button" onclick="cancelButton()">Cancel</button>
+        </div>
+    </form>
+
+    <div id="leavesection2heading">Previous Records</div>
+    <table id="leaveRecordsTable">
+        <thead>
+            <tr>
+                {% if isAdmin %}
+                <th>Employee Name</th>
+                {% endif %}
+                <th>Leave ID</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Leave Subject</th>
+                <th>Status</th>
+                {% if isAdmin %}
+                <th>Action</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in leave_records %}
+            <tr>
+                {% if isAdmin %}
+                <td>{{ record.emp_name }}</td>
+                {% endif %}
+                <td>{{ record.leave_id }}</td>
+                <td>{{ record.start_date }}</td>
+                <td>{{ record.end_date }}</td>
+                <td>{{ record.subject }}</td>
+                <td>{{ record.status }}</td>
+                {% if isAdmin %}
+                <td>
+                    <div class='button-container'>
+                        <form method="POST" action="{% url 'approve_leave' record.leave_id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="approve-button"><i class='bx bx-check' id='icons'></i></button>
+                        </form>
+                        <form method="POST" action="{% url 'reject_leave' record.leave_id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="reject-button"><i class='bx bx-x' id='icons'></i></button>
+                        </form>
+                    </div>
+                </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock section %}
+
+{% block script %}
+{% load static %}
+<script src="{% static "js/leave.js" %}"></script>
+{% endblock script %}

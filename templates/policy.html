@@ -1,0 +1,50 @@
+{% extends "index.html" %}
+
+{% block css %}
+{% load static %}
+<link rel="stylesheet" href="{% static "css/policy.css" %}">
+{% endblock css %}
+
+{% block section %}
+<div class = "policy_container">
+
+    <div class = "text_container">
+        <strong>Techsture </strong> 
+        shall strive to achieve optimum levels of information security by continue 
+        improving with the help of involving people, technology and appropriate 
+        environment/utilities in our course of operations to provide adequate confidence 
+        to our clients and interested parties regarding confidentiality, integrity and 
+        availability of information received, processed and transmitted by our company.
+
+        <br>
+
+        <h3>TECHSTURE SHALL:</h3>
+        <ul type= "none">
+            <li>
+                Continually improve on information security controls and tools proactively using a systematic risk assessment and controls considering the threats and vulnerabilities on on-going basis.
+            </li>
+            <hr>
+            <li>
+                Ensure to complete the projects on time without any security breach.
+            </li>
+            <hr>
+            <li>
+               Comply with ISO 27001, statutory, regulatory and contractual requirements as laid-down time-to-time national and international standards as applicable.
+            </li>
+            <hr>
+            <li>
+               Ensure business continuity and minimize business damage by preventing and minimizing the impact of security events and continual improvement.
+            </li>
+            <hr>
+            <li>
+                The organisation has an obligation to stakeholders, employees, customers and suppliers to protect the confidentiality, integrity and availability of information assets.
+            </li>
+        </ul>
+    </div>
+
+    <div class = "image_container">
+        <img src="static/img/policy.jpg" alt="policy">
+    </div>
+
+</div>
+{% endblock section %}

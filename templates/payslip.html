@@ -1,0 +1,73 @@
+{% extends "index.html" %}
+
+{% block css %}
+{% load static %}
+<link rel="stylesheet" href="{% static "css/payslip.css" %}">
+{% endblock css %}
+
+{% block section %}
+
+<form id="paySlipForm" method="POST" action="/payslip">
+    {% csrf_token %}
+
+    <!-- Hidden input fields to store selected month and year -->
+    <input type="hidden" id="selected-month" name="month">
+    <input type="hidden" id="selected-year" name="year">
+
+    <div class="header-payslip">
+        <label for="year">Select Year</label>
+        <div class="year-container">
+            <select id="year">
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+                <option value="2022">2022</option>
+                <option value="2021">2021</option>
+                <option value="2020">2020</option>
+                <option value="2019">2019</option>
+                <option value="2018">2018</option>
+                <option value="2017">2017</option>
+                <option value="2016">2016</option>
+            </select>
+        </div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Month</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for month in months %}
+            <tr>
+                <td>{{ month }}</td>
+                <td><button class="download-btn" data-month="{{ month }}"><i class='bx bx-download'></button></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</form>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var yearSelect = document.getElementById('year');
+        var monthInput = document.getElementById('selected-month');
+        var yearInput = document.getElementById('selected-year');
+        var downloadButtons = document.querySelectorAll('.download-btn');
+
+        // Update hidden input fields when month is clicked
+        downloadButtons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                var month = this.dataset.month;
+                var year = yearSelect.value;
+                monthInput.value = month;
+                yearInput.value = year;
+                // Submit the form
+                document.getElementById('paySlipForm').submit();
+            });
+        });
+    });
+</script>
+
+{% endblock section %}

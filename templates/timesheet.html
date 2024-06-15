@@ -1,0 +1,50 @@
+{% extends "index.html" %}
+
+{% block css %}
+{% load static %}
+<link rel="stylesheet" href="{% static "css/timesheet.css" %}">
+{% endblock css %}
+
+{% block section %}
+<div class="container">
+  <center>
+  <h1>Welcome, {{ display_name }}!</h1>
+  {% comment %} <form method="post" action="/timesheet">
+    {% csrf_token %}
+    <button type="submit" name="check_in">Check in</button>
+    <button type="submit" name="check_out">Check out</button>
+  </form> {% endcomment %}
+  </center>
+  <table id="checkInOutTable">
+    <thead>
+      <tr>
+        {% if isAdmin %}
+          <th>Username</th>
+        {% endif %}
+        <th>Date</th>
+        <th>Check-In</th>
+        <th>Check-Out</th>
+        <th>Session Time</th> 
+      </tr>
+    </thead>
+    <tbody id="tableBody">
+      {% for entry in timesheet_data %}
+      <tr>
+        {% if isAdmin %}
+          <td>{{ entry.username }}</td>
+        {% endif %}
+        <td>{{ entry.date }}</td>
+        <td>{{ entry.check_in_time }}</td>
+        <td>{{ entry.check_out_time }}</td>
+        <td>{{ entry.total_time }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock section %}
+
+{% block script %}
+{% comment %} {% load static %}
+<script src="{% static "js/timesheet.js" %}"></script> {% endcomment %}
+{% endblock script %}
